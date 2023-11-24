@@ -18,10 +18,11 @@ namespace JapanElectronics_POS.Forms
         string ConString = Utility.Utility.GetConnectionString();
         public AddQuantity()
         {
+            AutoScaleMode = AutoScaleMode.None;
             InitializeComponent();
-            InitializeForm();
-            
+            InitializeForm();       
         }
+
         public void InitializeForm()
         {
             cmb_company.DisplayMember = "CompanyName";
@@ -30,6 +31,10 @@ namespace JapanElectronics_POS.Forms
             cmb_category.ValueMember = "CategoryID";
 
             Fill_Companies();
+        }
+        private void AddQuantity_Load(object sender, EventArgs e)
+        {
+            this.ControlBox = false;
         }
         public void Fill_Companies()
         {
@@ -127,22 +132,15 @@ namespace JapanElectronics_POS.Forms
             cmb_model.DisplayMember = "ModelName";
             cmb_model.ValueMember = "ModelID";
         }
-        private void AddQuantity_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.Hide();
-            Dashboard dashboard = new Dashboard();
-            dashboard.Show();
-        }
-        private void button1_Click(object sender, EventArgs e)
+        private void btn_back_Click(object sender, EventArgs e)
         {
             this.Close();
         }
-
         private void btn_save_Click(object sender, EventArgs e)
         {
             try
             {
-                if (txt_qty.Text == "")
+                if (txt_unitprice.Text == "")
                 {
                     MessageBox.Show("Enter Model Name");
                 }
@@ -162,24 +160,32 @@ namespace JapanElectronics_POS.Forms
                 {
                     using (conn = new SqlConnection(ConString))
                     {
-                        string query = "Insert into tbl_Quantity(TotalItems,Model_ID,Category_ID,Company_ID) " +
-                                        "Values(@Item,@Model_ID,@Category_ID,@Company_ID)";
+                        string query = "Insert into tbl_Quantity(UnitPrice,Quantity,TotalPrice,Model_ID,Category_ID,Company_ID,CreationDate) " +
+                                        "Values(@UnitPrice,@Quantity,@TotalPrice,@Model_ID,@Category_ID,@Company_ID,@CreationDate)";
                         using (cmd = new SqlCommand(query, conn))
                         {
-                            conn.Open();
-                            cmd.Parameters.AddWithValue("@Item", txt_qty.Text);
+                            cmd.Parameters.AddWithValue("@UnitPrice", txt_unitprice.Text);
+                            cmd.Parameters.AddWithValue("@Quantity", txt_quantity.Text);
+                            cmd.Parameters.AddWithValue("@TotalPrice", txt_totalprice.Text);
                             cmd.Parameters.AddWithValue("@Model_ID", cmb_model.SelectedValue);
                             cmd.Parameters.AddWithValue("@Category_ID", cmb_category.SelectedValue);
                             cmd.Parameters.AddWithValue("@Company_ID", cmb_company.SelectedValue);
-
+                            if (DateTime.TryParse(txt_creationdate.Text, out DateTime creationDate))
+                            {
+                                cmd.Parameters.AddWithValue("@CreationDate", creationDate.ToString("yyyy-MM-dd"));
+                            }
+                            else
+                            {
+                                MessageBox.Show("Invalid Date Format");
+                                return;
+                            }
+                            conn.Open();
                             cmd.ExecuteNonQuery();
+                            Fill_Categories();
+                            Fill_Companies();
+                            Fill_Models();
                         }
                     }
-                    txt_qty.Text = "";
-                    //   GetAllCompanies();
-                    Fill_Categories();
-                    Fill_Companies();
-                    Fill_Models();
                 }
             }
             catch (Exception ex)
@@ -190,6 +196,22 @@ namespace JapanElectronics_POS.Forms
             {
                 conn.Close();
             }
+        }    
+        private void txt_quantity_TextChanged(object sender, EventArgs e)
+        {
+            if (txt_quantity.Text != "")
+            {
+                int uprice = Convert.ToInt32(txt_unitprice.Text);
+                int qty = Convert.ToInt32(txt_quantity.Text);
+                txt_totalprice.Text = Convert.ToString(uprice * qty);
+            }
+            else 
+            {
+                txt_totalprice.Text = txt_unitprice.Text;
+
+            }
         }
+
+       
     }
 }

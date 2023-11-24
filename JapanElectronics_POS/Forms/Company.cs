@@ -24,6 +24,7 @@ namespace JapanElectronics_POS.Forms
 
         private void Company_Load(object sender, EventArgs e)
         {
+            this.ControlBox = false;
             GetAllCompanies();
         }
         public void GetAllCompanies()
@@ -89,11 +90,6 @@ namespace JapanElectronics_POS.Forms
          //   dashboard.Show();
         }
 
-        private void Company_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.Hide();
-            Dashboard dashboard = new Dashboard();
-            dashboard.Show();
-        }
+       
     }
 }

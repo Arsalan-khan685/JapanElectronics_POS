@@ -17,37 +17,9 @@ namespace JapanElectronics_POS.Forms
             InitializeComponent();
         }
 
-        private void link_Campany_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void Dashboard_Load(object sender, EventArgs e)
         {
-            this.Hide();
-            Company company = new Company();
-            company.Show();
-        }
-
-        private void link_Cat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            this.Hide();
-            Category category = new Category();
-            category.Show();
-        }
-
-        private void link_model_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            this.Hide();
-            Models models = new Models();
-            models.Show();
-        }
-
-        private void Dashboard_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void link_add_qty_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            this.Hide();
-            AddQuantity addQuantity = new AddQuantity();
-            addQuantity.Show();
+            this.ControlBox = false;
         }
     }
 }

@@ -22,6 +22,11 @@ namespace JapanElectronics_POS.Forms
             InitializeForm();
             dgv_models.AutoGenerateColumns = false;
         }
+        private void Models_Load(object sender, EventArgs e)
+        {
+            this.ControlBox = false;
+        }
+
         public void InitializeForm()
         {
             cmb_company.DisplayMember = "CompanyName";
@@ -120,12 +125,6 @@ namespace JapanElectronics_POS.Forms
                 }
             }
         }
-        private void Models_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.Hide();
-            Dashboard dashboard = new Dashboard();
-            dashboard.Show();
-        }
         private void btn_back_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -175,6 +174,6 @@ namespace JapanElectronics_POS.Forms
             }
         }
 
-       
+     
     }
 }

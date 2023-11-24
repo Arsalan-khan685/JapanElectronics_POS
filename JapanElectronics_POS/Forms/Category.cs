@@ -23,6 +23,7 @@ namespace JapanElectronics_POS.Forms
         }
         private void Category_Load(object sender, EventArgs e)
         {
+            this.ControlBox = false;
             FillCompanies();
             GetAllCategories();
         }
@@ -112,18 +113,13 @@ namespace JapanElectronics_POS.Forms
                 throw;
             }           
         }
-        private void Category_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            this.Hide();
-            Dashboard dashboard = new Dashboard();
-            dashboard.Show();
-        }
         private void btn_back_Click(object sender, EventArgs e)
         {
             this.Close();
          //   Dashboard dashboard = new Dashboard();
          //   dashboard.Show();
         }
-     
+
+       
     }
 }
